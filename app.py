@@ -10,18 +10,29 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from datetime import datetime
 from sklearn.metrics import classification_report
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # === Setup ===
 os.makedirs("logs", exist_ok=True)
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
+app.wsgi_app = ProxyFix(app.wsgi_app)
 logging.basicConfig(filename="logs/app.log", level=logging.INFO)
 
-# === Load model & scaler ===
-model = tf.keras.models.load_model("bidirectional_lstm_classweight.h5", compile=False)
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+# === Load model & scaler safely ===
+try:
+    model = tf.keras.models.load_model("bidirectional_lstm_classweight.h5", compile=False)
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+except Exception as e:
+    logging.error(f"❌ Model load failed: {e}")
+    model = None
 
-scaler = joblib.load("scaler_ids.pkl")
+try:
+    scaler = joblib.load("scaler_ids.pkl")
+except Exception as e:
+    logging.error(f"❌ Scaler load failed: {e}")
+    scaler = None
+
 THRESHOLD = 0.35
 FEATURES = [
     'dst_host_srv_serror_rate', 'serror_rate', 'srv_serror_rate', 'logged_in',
@@ -35,6 +46,10 @@ def index():
 
 @app.route('/predict', methods=["POST"])
 def predict():
+    if not model or not scaler:
+        error_msg = "❌ Model or scaler not loaded."
+        return render_template("index.html", features=FEATURES, error=error_msg)
+
     try:
         numeric_features = [
             'duration', 'src_bytes', 'dst_bytes', 'count',
@@ -88,7 +103,7 @@ def predict():
                                history=session["history"])
     except Exception as e:
         logging.error(f"Prediction error: {e}")
-        error_msg = f"❌ Prediction error: {e}"
+        error_msg = f"❌ Prediction error: {str(e)}"
         return render_template("index.html",
                                features=FEATURES,
                                history=session.get("history", []),
@@ -107,59 +122,8 @@ def model_info():
             with open(metrics_file, "r") as f:
                 metrics = json.load(f)
         else:
-            test_path = "NSL-KDD/KDDTest+.txt"
-            if not os.path.exists(test_path):
-                raise FileNotFoundError(f"Test file not found at {test_path}")
+            raise FileNotFoundError("⚠️ Cached metrics not available. Please generate them locally.")
 
-            df = pd.read_csv(test_path, header=None)
-            df.columns = [
-                "duration", "protocol_type", "service", "flag", "src_bytes", "dst_bytes", "land", "wrong_fragment", "urgent",
-                "hot", "num_failed_logins", "logged_in", "num_compromised", "root_shell", "su_attempted", "num_root",
-                "num_file_creations", "num_shells", "num_access_files", "num_outbound_cmds", "is_host_login",
-                "is_guest_login", "count", "srv_count", "serror_rate", "srv_serror_rate", "rerror_rate", "srv_rerror_rate",
-                "same_srv_rate", "diff_srv_rate", "srv_diff_host_rate", "dst_host_count", "dst_host_srv_count",
-                "dst_host_same_srv_rate", "dst_host_diff_srv_rate", "dst_host_same_src_port_rate",
-                "dst_host_srv_diff_host_rate", "dst_host_serror_rate", "dst_host_srv_serror_rate", "dst_host_rerror_rate",
-                "dst_host_srv_rerror_rate", "label", "difficulty"
-            ]
-
-            # Ensure label column is present and clean
-            df['label'] = df['label'].astype(str).str.strip().apply(lambda x: 0 if x == 'normal' else 1)
-
-            # One-hot encode categorical variables
-            df = pd.get_dummies(df, columns=["protocol_type", "flag"])
-
-            # Ensure all required model input features exist
-            for col in FEATURES:
-                if col not in df.columns:
-                    df[col] = 0.0
-            df = df.reindex(columns=FEATURES + ['label'], fill_value=0)
-
-            X = df[FEATURES]
-            y = df['label']
-            X_scaled = scaler.transform(X)
-            X_lstm = X_scaled.reshape((X_scaled.shape[0], 1, len(FEATURES)))
-            preds_prob = model.predict(X_lstm, verbose=0).flatten()
-            preds = (preds_prob >= THRESHOLD).astype(int)
-            report = classification_report(y, preds, output_dict=True)
-            false_positive = sum((preds == 1) & (y == 0))
-            false_negative = sum((preds == 0) & (y == 1))
-
-            precision = report['1']['precision'] if '1' in report else 0
-            recall = report['1']['recall'] if '1' in report else 0
-
-            metrics = {
-                "accuracy": f"{report['accuracy']*100:.2f}%",
-                "precision": f"{precision*100:.2f}%",
-                "recall": f"{recall*100:.2f}%",
-                "false_positive_rate": f"{100 * false_positive / max(sum(y==0), 1):.2f}%",
-                "false_negative_rate": f"{100 * false_negative / max(sum(y==1), 1):.2f}%",
-                "threshold": THRESHOLD,
-                "features_used": FEATURES
-            }
-
-            with open(metrics_file, "w") as f:
-                json.dump(metrics, f)
     except Exception as e:
         metrics = {"error": str(e)}
 
@@ -167,23 +131,22 @@ def model_info():
 
 @app.route('/metrics-chart')
 def metrics_chart():
-    if not os.path.exists("metrics_cache.json"):
-        return "No cached metrics yet.", 404
-    with open("metrics_cache.json", 'r') as f:
-        metrics = json.load(f)
-    labels = ["Accuracy", "Precision", "Recall"]
-    values = [float(metrics["accuracy"].replace('%','')),
-              float(metrics["precision"].replace('%','')),
-              float(metrics["recall"].replace('%',''))]
-    fig, ax = plt.subplots()
-    ax.bar(labels, values, color=['green', 'blue', 'orange'])
-    ax.set_ylim(0, 100)
-    ax.set_ylabel("Percentage")
-    ax.set_title("Model Metrics Overview")
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    return send_file(buf, mimetype='image/png')
+    try:
+        with open("metrics_cache.json", 'r') as f:
+            metrics = json.load(f)
+        labels = ["Accuracy", "Precision", "Recall"]
+        values = [float(metrics[k].replace('%','')) for k in ["accuracy", "precision", "recall"]]
+        fig, ax = plt.subplots()
+        ax.bar(labels, values, color=['green', 'blue', 'orange'])
+        ax.set_ylim(0, 100)
+        ax.set_ylabel("Percentage")
+        ax.set_title("Model Metrics Overview")
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        return send_file(buf, mimetype='image/png')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/download-metrics')
 def download_metrics():
@@ -193,4 +156,4 @@ def download_metrics():
     return "Metrics file not found.", 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
