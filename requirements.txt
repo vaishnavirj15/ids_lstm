@@ -1,6 +1,8 @@
 flask
-tensorflow
-joblib
 numpy
-flask-limiter
+pandas
+tensorflow
+scikit-learn==1.5.2
+h5py
 gunicorn
+matplotlib
