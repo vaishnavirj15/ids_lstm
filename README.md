@@ -72,17 +72,18 @@ Dense (1 unit, Sigmoid)
 ---
 
 ## 🌐 Web Application
-✔️ Flask-based responsive interface
-✔️ Real-time risk classification (Low/Medium/High)
-✔️ History tracking and visualizations
-✔️ Intuitive layout and input system
+-✔️ Flask-based responsive interface
+-✔️ Real-time risk classification (Low/Medium/High)
+-✔️ History tracking and visualizations
+-✔️ Intuitive layout and input system
 
 ---
 
-🚀 Getting Started
+## 🚀 Getting Started
+
 **1️⃣ Clone the Repository**
-```git clone https://github.com/yourusername/lstm-network-ids.git```
-```cd lstm-network-ids```
+-```git clone https://github.com/yourusername/lstm-network-ids.git```
+-```cd lstm-network-ids```
 **2️⃣ Install Dependencies**
 ```pip install -r requirements.txt```
 
@@ -91,17 +92,17 @@ Or install manually:
 ```pip install tensorflow flask numpy pandas scikit-learn matplotlib joblib```
 
 **3️⃣  Download NSL-KDD Dataset for Training**
-```mkdir -p NSL-KDD```
-```wget -O NSL-KDD/KDDTrain+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt```
-```wget -O NSL-KDD/KDDTest+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt```
+-```mkdir -p NSL-KDD```
+-```wget -O NSL-KDD/KDDTrain+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt```
+-```wget -O NSL-KDD/KDDTest+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt```
 
 **4️⃣ Train the Model (Skip if using pretrained)**
-```python lstm_test.py```
+-```python lstm_test.py```
 
 **5️⃣ Launch the Web Application**
-```python app.py```
+-```python app.py```
 
-Then open http://localhost:5000 in your browser.
+*Then open http://localhost:5000 in your browser.*
 
 ---
 
