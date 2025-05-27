@@ -62,7 +62,7 @@ Dense (1 unit, Sigmoid)
 
 ## 🧬 Features Used
 
-python
+**python**
 ```features``` = [
     'dst_host_srv_serror_rate', 'serror_rate', 'srv_serror_rate', 'logged_in',
     'dst_host_same_srv_rate', 'protocol_type_tcp', 'protocol_type_udp',
@@ -80,25 +80,25 @@ python
 ---
 
 🚀 Getting Started
-1️⃣ Clone the Repository
+**1️⃣ Clone the Repository**
 ```git clone https://github.com/yourusername/lstm-network-ids.git```
 ```cd lstm-network-ids```
-2️⃣ Install Dependencies
+**2️⃣ Install Dependencies**
 ```pip install -r requirements.txt```
 
 Or install manually:
 
 ```pip install tensorflow flask numpy pandas scikit-learn matplotlib joblib```
 
-3️⃣  Download NSL-KDD Dataset for Training
+**3️⃣  Download NSL-KDD Dataset for Training**
 ```mkdir -p NSL-KDD```
 ```wget -O NSL-KDD/KDDTrain+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt```
 ```wget -O NSL-KDD/KDDTest+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt```
 
-4️⃣ Train the Model (Skip if using pretrained)
+**4️⃣ Train the Model (Skip if using pretrained)**
 ```python lstm_test.py```
 
-5️⃣ Launch the Web Application
+**5️⃣ Launch the Web Application**
 ```python app.py```
 
 Then open http://localhost:5000 in your browser.
@@ -106,15 +106,15 @@ Then open http://localhost:5000 in your browser.
 ---
 
 ## 🏗️ Training Strategy
-Data normalization + one-hot encoding
+- **Data normalization + one-hot encoding**
 
-Focal loss to focus learning on rare/complex cases
+- **Focal loss to focus learning on rare/complex cases**
 
-Class weights for imbalance correction
+- **Class weights for imbalance correction**
 
-Adam optimizer with learning rate decay
+- **Adam optimizer with learning rate decay**
 
-Early stopping to avoid overfitting
+- **Early stopping to avoid overfitting**
 
 ---
 
@@ -133,11 +133,11 @@ Early stopping to avoid overfitting
 ---
 
 ## 🙌 Credits
-Dataset: NSL-KDD by Canadian Institute for Cybersecurity
+**Dataset: NSL-KDD by Canadian Institute for Cybersecurity**
 
-Model: Custom BiLSTM with TensorFlow 2.x
+**Model: Custom BiLSTM with TensorFlow 2.x**
 
-Author: Vaishnavi Raj
+**Author: Vaishnavi Raj**
 
 
 
