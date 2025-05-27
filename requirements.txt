@@ -2,7 +2,7 @@ Flask
 numpy
 pandas
 tensorflow
-scikit-learn
+scikit-learn==1.5.2
 h5py
 gunicorn
 matplotlib
