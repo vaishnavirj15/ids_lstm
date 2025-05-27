@@ -51,10 +51,19 @@ This project leverages a deep learning model trained on the NSL-KDD dataset to d
 ## 🧠 Model Architecture
 
 Bidirectional LSTM (64 units, L1-L2 regularization) → BatchNorm → Dropout(0.3)
+
+
+
 ↓
 Bidirectional LSTM (32 units, L1-L2 regularization) → BatchNorm → Dropout(0.3)
+
+
+
 ↓
 Dense (16 units, ReLU) → Dropout(0.2)
+
+
+
 ↓
 Dense (1 unit, Sigmoid)
 
@@ -62,8 +71,8 @@ Dense (1 unit, Sigmoid)
 
 ## 🧬 Features Used
 
-**python**
-```features``` = [
+```python```
+features = [
     'dst_host_srv_serror_rate', 'serror_rate', 'srv_serror_rate', 'logged_in',
     'dst_host_same_srv_rate', 'protocol_type_tcp', 'protocol_type_udp',
     'count', 'src_bytes', 'dst_bytes', 'flag_SF', 'flag_REJ'
@@ -73,17 +82,35 @@ Dense (1 unit, Sigmoid)
 
 ## 🌐 Web Application
 -✔️ Flask-based responsive interface
+
+
 -✔️ Real-time risk classification (Low/Medium/High)
+
+
 -✔️ History tracking and visualizations
+
+
+
 -✔️ Intuitive layout and input system
+
+
 
 ---
 
 ## 🚀 Getting Started
 
+
+
+
 **1️⃣ Clone the Repository**
 -```git clone https://github.com/yourusername/lstm-network-ids.git```
+
+
+
 -```cd lstm-network-ids```
+
+
+
 **2️⃣ Install Dependencies**
 ```pip install -r requirements.txt```
 
@@ -91,13 +118,28 @@ Or install manually:
 
 ```pip install tensorflow flask numpy pandas scikit-learn matplotlib joblib```
 
+
+
+
 **3️⃣  Download NSL-KDD Dataset for Training**
 -```mkdir -p NSL-KDD```
+
+
+
 -```wget -O NSL-KDD/KDDTrain+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt```
+
+
+
 -```wget -O NSL-KDD/KDDTest+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt```
+
+
+
 
 **4️⃣ Train the Model (Skip if using pretrained)**
 -```python lstm_test.py```
+
+
+
 
 **5️⃣ Launch the Web Application**
 -```python app.py```
