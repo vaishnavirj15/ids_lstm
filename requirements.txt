@@ -1,6 +1,7 @@
-flask
-tensorflow
-joblib
-numpy
-flask-limiter
+Flask
 gunicorn
+matplotlib
+numpy
+pandas
+scikit-learn
+

@@ -1,0 +1,1 @@
+{"accuracy": "81.53%", "precision": "96.47%", "recall": "70.12%", "false_positive_rate": "3.39%", "false_negative_rate": "29.88%", "threshold": 0.35, "features_used": ["dst_host_srv_serror_rate", "serror_rate", "srv_serror_rate", "logged_in", "dst_host_same_srv_rate", "protocol_type_tcp", "protocol_type_udp", "count", "src_bytes", "dst_bytes", "flag_SF", "flag_REJ"]}
