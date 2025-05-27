@@ -62,8 +62,8 @@ Dense (1 unit, Sigmoid)
 
 ## 🧬 Features Used
 
-```python```
-features = [
+python
+```features``` = [
     'dst_host_srv_serror_rate', 'serror_rate', 'srv_serror_rate', 'logged_in',
     'dst_host_same_srv_rate', 'protocol_type_tcp', 'protocol_type_udp',
     'count', 'src_bytes', 'dst_bytes', 'flag_SF', 'flag_REJ'
@@ -80,25 +80,26 @@ features = [
 ---
 
 🚀 Getting Started
-```1️⃣ Clone the Repository```
-git clone https://github.com/yourusername/lstm-network-ids.git
-cd lstm-network-ids
-```2️⃣ Install Dependencies```
-pip install -r requirements.txt
-```Or install manually:```
+1️⃣ Clone the Repository
+```git clone https://github.com/yourusername/lstm-network-ids.git```
+```cd lstm-network-ids```
+2️⃣ Install Dependencies
+```pip install -r requirements.txt```
 
-pip install tensorflow flask numpy pandas scikit-learn matplotlib joblib
+Or install manually:
 
-```3️⃣  Download NSL-KDD Dataset for Training```
-mkdir -p NSL-KDD
-wget -O NSL-KDD/KDDTrain+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt
-wget -O NSL-KDD/KDDTest+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt
+```pip install tensorflow flask numpy pandas scikit-learn matplotlib joblib```
 
-```4️⃣ Train the Model (Skip if using pretrained)```
-python lstm_test.py
+3️⃣  Download NSL-KDD Dataset for Training
+```mkdir -p NSL-KDD```
+```wget -O NSL-KDD/KDDTrain+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt```
+```wget -O NSL-KDD/KDDTest+.txt https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt```
 
-```5️⃣ Launch the Web Application```
-python app.py
+4️⃣ Train the Model (Skip if using pretrained)
+```python lstm_test.py```
+
+5️⃣ Launch the Web Application
+```python app.py```
 
 Then open http://localhost:5000 in your browser.
 
