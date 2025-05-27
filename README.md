@@ -59,22 +59,26 @@ Dense (16 units, ReLU) → Dropout(0.2)
 ↓
 Dense (1 unit, Sigmoid)
 
+---
+
 
 ## 🧬 Features Used
 ```python
-Copy
-Edit
 features = [
     'dst_host_srv_serror_rate', 'serror_rate', 'srv_serror_rate', 'logged_in',
     'dst_host_same_srv_rate', 'protocol_type_tcp', 'protocol_type_udp',
     'count', 'src_bytes', 'dst_bytes', 'flag_SF', 'flag_REJ'
 ]
 
+---
+
 ## 🌐 Web Application
 ✔️ Flask-based responsive interface
 ✔️ Real-time risk classification (Low/Medium/High)
 ✔️ History tracking and visualizations
 ✔️ Intuitive layout and input system
+
+---
 
 ## 🚀 Getting Started
 ```1️⃣ Clone the Repository
@@ -100,6 +104,7 @@ python lstm_test.py
 python app.py
 Then open http://localhost:5000 in your browser
 
+---
 ## 🏗️ Training Strategy
 -Data normalization + one-hot encoding
 
@@ -110,6 +115,8 @@ Then open http://localhost:5000 in your browser
 -Adam optimizer with learning rate decay
 
 -Early stopping to avoid overfitting
+
+---
 
 ## 🔮 Future Improvements
 -🌐 Real-time packet sniffing and live traffic monitoring
