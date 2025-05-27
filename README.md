@@ -52,19 +52,13 @@ This project leverages a deep learning model trained on the NSL-KDD dataset to d
 
 Bidirectional LSTM (64 units, L1-L2 regularization) → BatchNorm → Dropout(0.3)
 
-
-
-↓
+                      ↓
 Bidirectional LSTM (32 units, L1-L2 regularization) → BatchNorm → Dropout(0.3)
 
-
-
-↓
+                      ↓
 Dense (16 units, ReLU) → Dropout(0.2)
 
-
-
-↓
+                      ↓
 Dense (1 unit, Sigmoid)
 
 ---
