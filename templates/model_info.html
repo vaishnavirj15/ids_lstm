@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Model Info - LSTM IDS Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    .sidebar {
+      width: 220px;
+      background: #343a40;
+      color: #fff;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+    }
+    .sidebar h2 {
+      font-size: 1.4rem;
+    }
+    .sidebar .nav-link {
+      color: #ccc;
+      margin: 10px 0;
+      display: block;
+      text-decoration: none;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .main-content {
+      margin-left: 240px;
+      padding: 40px;
+      flex: 1;
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    .btn-primary {
+      background-color: #007BFF;
+      border-color: #007BFF;
+    }
+    .btn-outline-info {
+      color: #0dcaf0;
+      border-color: #0dcaf0;
+    }
+    .btn-clear {
+      background-color: #dc3545;
+      color: white;
+      width: 100%;
+      text-align: center;
+      padding: 0.375rem 0.75rem;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+    .dark-mode .main-content {
+      background: #2c2c2c;
+    }
+    .dark-mode .card {
+      background: #3a3a3a;
+      color: #e0e0e0;
+      box-shadow: none;
+      border: 1px solid #555;
+    }
+    .dark-mode .btn-primary {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    .dark-mode .btn-outline-info {
+      color: #66d9ff;
+      border-color: #66d9ff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>🛡 IDS Dashboard</h2>
+  <nav>
+    <a href="{{ url_for('index') }}" class="nav-link">📊 Predict</a>
+    <a href="{{ url_for('model_info') }}" class="nav-link active">🧠 Model Info</a>
+    <a href="{{ url_for('index') }}" class="nav-link">📁 Index</a>
+    <button onclick="toggleDarkMode()" class="btn btn-sm btn-light mt-3 w-100">🌓 Dark Mode</button>
+    <a href="{{ url_for('clear') }}" class="btn btn-sm btn-clear">🧹 Clear History</a>
+  </nav>
+</div>
+
+<div class="main-content">
+  <h2 class="mb-4">🧠 Model Performance Summary</h2>
+
+  {% if metrics.error %}
+    <div class="alert alert-danger">{{ metrics.error }}</div>
+  {% else %}
+    <div class="card shadow-sm p-4">
+      <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>Accuracy:</strong> {{ metrics.accuracy }}</li>
+        <li class="list-group-item"><strong>Precision:</strong> {{ metrics.precision }}</li>
+        <li class="list-group-item"><strong>Recall:</strong> {{ metrics.recall }}</li>
+        <li class="list-group-item"><strong>False Positive Rate:</strong> {{ metrics.false_positive_rate }}</li>
+        <li class="list-group-item"><strong>False Negative Rate:</strong> {{ metrics.false_negative_rate }}</li>
+        <li class="list-group-item"><strong>Prediction Threshold:</strong> {{ metrics.threshold }}</li>
+      </ul>
+
+      <h5 class="mb-3">📌 Features Used</h5>
+      <ul class="list-group list-group-flush mb-4">
+        {% for feature in metrics.features_used %}
+          <li class="list-group-item">{{ feature }}</li>
+        {% endfor %}
+      </ul>
+
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url_for('download_metrics') }}" class="btn btn-primary">⬇️ Download Metrics (JSON)</a>
+        <a href="{{ url_for('metrics_chart') }}" target="_blank" class="btn btn-outline-info">📊 View Chart</a>
+      </div>
+    </div>
+  {% endif %}
+
+  <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">← Back to Home</a>
+</div>
+
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+flask
+tensorflow
+joblib
+numpy
+flask-limiter
+gunicorn
